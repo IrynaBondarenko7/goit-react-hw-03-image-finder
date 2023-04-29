@@ -1,5 +1,7 @@
 import { ImgModal } from 'components/Modal/ImgModal';
 import { Component } from 'react';
+import { StyledGalleryImg, StyledGalleryItem } from './ImageGalleryItem.styled';
+
 export default class ImageGalleryItem extends Component {
   state = {
     selectedImg: null,
@@ -15,15 +17,19 @@ export default class ImageGalleryItem extends Component {
       hit: { webformatURL, tags, largeImageURL },
     } = this.props;
     return (
-      <li className="gallery-item">
-        <img src={webformatURL} alt={tags} onClick={this.setSelectedImg} />
+      <StyledGalleryItem>
+        <StyledGalleryImg
+          src={webformatURL}
+          alt={tags}
+          onClick={this.setSelectedImg}
+        />
         <ImgModal
           isOpen={this.state.selectedImg !== null}
           largeImageURL={largeImageURL}
           tags={tags}
           closeModal={this.closeModal}
         />
-      </li>
+      </StyledGalleryItem>
     );
   }
 }

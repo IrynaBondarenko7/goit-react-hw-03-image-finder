@@ -1,4 +1,5 @@
 import Modal from 'react-modal';
+
 const customStyles = {
   content: {
     top: '50%',
@@ -17,9 +18,13 @@ export const ImgModal = ({ isOpen, closeModal, largeImageURL, tags }) => {
       onRequestClose={closeModal}
       style={customStyles}
       contentLabel="Example Modal"
+      overlayClassName="Overlay"
+      className="Modal"
     >
-      <div className="modal">
-        <img src={largeImageURL} alt={tags} />
+      <div>
+        <div>
+          <img src={largeImageURL} alt={tags} />
+        </div>
       </div>
     </Modal>
   );

@@ -5,6 +5,7 @@ import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import toast, { Toaster } from 'react-hot-toast';
+import { StyledLayout } from './Layout/Layout.styled';
 
 const ERROR_MSG = 'Something went wrong, try again';
 
@@ -15,17 +16,15 @@ export class App extends Component {
     hits: null,
     error: null,
     total: null,
+    loading: false,
   };
 
   async componentDidUpdate(prevProps, prevState) {
+    const { image, page } = this.state;
     if (prevState.image !== this.state.image) {
       try {
         this.setState({ loading: true, hits: null });
-        const { hits, totalHits } = await fetchImg(
-          this.state.image,
-          this.state.page
-        );
-        console.log(totalHits);
+        const { hits, totalHits } = await fetchImg(image, page);
         this.setState({ hits: hits, total: totalHits });
       } catch (error) {
         this.setState({ error: ERROR_MSG });
@@ -36,7 +35,7 @@ export class App extends Component {
     if (prevState.page !== this.state.page && this.state.page > 1) {
       try {
         this.setState({ loading: true });
-        const { hits } = await fetchImg(this.state.image, this.state.page);
+        const { hits } = await fetchImg(image, page);
         this.setState({ hits: [...this.state.hits, ...hits] });
       } catch (error) {
         this.setState({ error: ERROR_MSG });
@@ -51,14 +50,11 @@ export class App extends Component {
   };
   loadMoreImg = () => {
     this.setState({ page: this.state.page + 1 });
-    console.log(this.state.total);
-    console.log(this.state.hits.length);
     if (
       this.state.hits !== null &&
       this.state.hits.length === this.state.total
     ) {
       toast("We're sorry, but you've reached the end of search results.");
-      console.log('the end');
     }
   };
   getHits = hits => {
@@ -69,22 +65,22 @@ export class App extends Component {
   };
 
   render() {
+    const { error, hits, total } = this.state;
     return (
-      <div>
+      <StyledLayout>
         <Searchbar
           onSubmit={this.handleFormSubmit}
           resetPage={this.resetPage}
         />
-        {this.state.error && <div>{this.state.error}</div>}
-        {this.state.hits !== null && <ImageGallery hits={this.state.hits} />}
+        {error && <div>{error}</div>}
+        {hits !== null && <ImageGallery hits={hits} />}
 
-        {this.state.hits !== null &&
-          this.state.hits.length <= this.state.total && (
-            <Button loadImg={this.loadMoreImg} />
-          )}
+        {hits !== null && hits.length <= total && (
+          <Button loadImg={this.loadMoreImg} />
+        )}
         <Toaster />
         {this.state.loading && <Loader />}
-      </div>
+      </StyledLayout>
     );
   }
 }

@@ -1,5 +1,13 @@
 import { Component } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import {
+  StyledButtonLlabel,
+  StyledSearchBar,
+  StyledSearchForm,
+  StyledSearchInput,
+  Styledbutton,
+} from './Searchbar.styled';
+import { BsSearch } from 'react-icons/bs';
 
 export class Searchbar extends Component {
   state = {
@@ -20,15 +28,15 @@ export class Searchbar extends Component {
   };
   render() {
     return (
-      <header className="searchbar">
+      <StyledSearchBar>
         <Toaster />
-        <form onSubmit={this.handleSubmit} className="form">
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
+        <StyledSearchForm onSubmit={this.handleSubmit}>
+          <Styledbutton type="submit">
+            <BsSearch />
+            <StyledButtonLlabel>Search</StyledButtonLlabel>
+          </Styledbutton>
 
-          <input
-            className="input"
+          <StyledSearchInput
             type="text"
             value={this.state.imgName}
             onChange={this.handleSearchImgNameChange}
@@ -36,8 +44,8 @@ export class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
           />
-        </form>
-      </header>
+        </StyledSearchForm>
+      </StyledSearchBar>
     );
   }
 }
